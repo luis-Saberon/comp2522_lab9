@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Game
 {
-    //TODO
+    // TO DO
     // CHANGE THE COUNTRY NAME TO USE COUNTRY LIST
     // ADD FUNCTIONALITY FOR ATTEMPT FILE READING AND WRITING
     private static final String TITLE       = "LUCKY VAULT - COUNTRY MODE. Type QUIT to exit";
