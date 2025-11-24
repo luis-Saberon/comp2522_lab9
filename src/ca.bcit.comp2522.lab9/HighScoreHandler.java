@@ -1,18 +1,21 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class HighScoreHandler
+/**
+ * Abstract class to handle high scores.
+ */
+abstract class HighScoreHandler
 {
     private static final String HIGHSCORE_STRING    = "COUNTRY=";
     private static final Path FILE                  = Paths.get( "highscores.txt");
     private static final Path DIR                   = Paths.get("src", "data");
     private static final Path PATH                  = DIR.resolve(FILE);
-    public static void main(String[] args) throws IOException
-    {
-        System.out.println(getHighScore());
-    }
+    private static final int DEFAULT_SCORE          = 0;
 
     /**
      * Checks if the newscore is higher than the current highscore, if so, updates the
@@ -25,7 +28,12 @@ public class HighScoreHandler
         final int currentHighScore;
 
         currentHighScore = getHighScore();
-        if(newScore > currentHighScore)
+        if(currentHighScore == DEFAULT_SCORE)
+        {
+            updateHighScore(newScore);
+            return true;
+        }
+        if(newScore < currentHighScore)
         {
             updateHighScore(newScore);
             return true;
@@ -33,10 +41,38 @@ public class HighScoreHandler
         return false;
     }
 
-    public static void updateHighScore(final int newScore)
-    {
 
+    /**
+     * Writes to the highscore file with the new highscore
+     * @param newScore is the newest high score.
+     */
+    private static void updateHighScore(final int newScore)
+    {
+        final String content;
+
+        content = HIGHSCORE_STRING + newScore;
+        try{
+            if(Files.notExists(DIR))
+            {
+                Files.createDirectories(DIR);
+            }
+
+            try(final BufferedWriter writer =
+                    Files.newBufferedWriter(PATH, StandardCharsets.UTF_8))
+            {
+                writer.write(content);
+            }
+        } catch(final IOException e)
+        {
+            e.printStackTrace();
+        }
     }
+
+    /**
+     * Gets the highscore from the designated file. If it's empty or not in the format of
+     * COUNTRY=x, return highscore of 0. Else, return the highscore
+     * @return int highscore
+     */
     public static int getHighScore()
     {
         checkHighscoreFile();
@@ -48,7 +84,7 @@ public class HighScoreHandler
             line = lines.readLine();
             if(!line.startsWith(HIGHSCORE_STRING))
             {
-                return 0;
+                return DEFAULT_SCORE;
             }
 
             try
@@ -58,41 +94,34 @@ public class HighScoreHandler
             }
             catch(final NumberFormatException e)
             {
-                return 0;
+                return DEFAULT_SCORE;
             }
         } catch(final IOException e)
         {
             e.printStackTrace();
         }
-        return 0;
+        return DEFAULT_SCORE;
     }
 
     /**
      * Checks if highscore file exists, if it does not, creates it
-     * @throws IOException if something goes wrong in the making of the directories and file
      */
     private static void checkHighscoreFile()
     {
-        //this is probably pretty ugly, but idk how to make it better
-        if (Files.notExists(PATH))
-        {
-            if (Files.notExists(DIR))
+        try{
+            if(Files.notExists(DIR))
             {
-                try
-                {
-                    Files.createDirectories(DIR);
-                } catch(final IOException e)
-                {
-                    e.printStackTrace();
-                }
+                Files.createDirectories(DIR);
             }
-            try
+
+            if(Files.notExists(PATH))
             {
                 Files.createFile(PATH);
-            } catch (final IOException e)
-            {
-                e.printStackTrace();
             }
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
         }
+
     }
 }
