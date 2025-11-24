@@ -7,8 +7,10 @@ import java.util.Scanner;
  */
 public class Game
 {
-    private static final String TITLE       = "LUCKY VAULT - COUNTRY MODE. Type QUIT to exit";
-    private static final WordList COUNTRIES = new WordList();
+    private static final String TITLE           = "LUCKY VAULT - COUNTRY MODE. Type QUIT to exit";
+    private static final WordList COUNTRIES     = new WordList();
+    private static final int INITIAL_ATTEMPTS   = 0;
+    private static final int INITIAL_CORRECT     = 0;
 
     private int attempts;
     private final String country;
@@ -20,9 +22,9 @@ public class Game
      */
     public Game()
     {
-        country = COUNTRIES.getRandomCountry().toLowerCase();
-        attempts = 0;
-        logger = new LoggerService();
+        country     = COUNTRIES.getRandomCountry().toLowerCase();
+        attempts    = INITIAL_ATTEMPTS;
+        logger      = new LoggerService();
     }
 
     /**
@@ -69,7 +71,7 @@ public class Game
     public boolean guessChecker(final String guess)
     {
         attempts++;
-        System.out.println("The guess is" + guess);
+        System.out.println("The guess is " + guess);
         if(guess.equals(country)){
             System.out.println("Correct in " + attempts + " attempts! Word was: " + country);
             logger.updateFile(guess, "correct");
@@ -103,7 +105,7 @@ public class Game
      */
     private int guessComparer(final String guess)
     {
-        int correctPosition = 0;
+        int correctPosition = INITIAL_CORRECT;
 
         for(int i = 0; i < country.length(); i++)
         {

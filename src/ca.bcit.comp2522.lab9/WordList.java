@@ -59,9 +59,7 @@ public class WordList
                 }
             }
             return loadedCountries;
-
         }
-
         catch (final IOException e)
         {
             System.err.println("Error reading country list file: " + e.getMessage());

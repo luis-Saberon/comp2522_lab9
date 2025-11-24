@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
@@ -65,11 +64,9 @@ public class LoggerService
             {
                 Files.createDirectories(DIR);
             }
-
-
-            Files.write(path, builder.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
-
-        } catch (final IOException e)
+            Files.writeString(path, builder.toString(), StandardOpenOption.APPEND);
+        }
+        catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -91,7 +88,8 @@ public class LoggerService
             {
                 Files.createFile(path);
             }
-        } catch (final IOException e)
+        }
+        catch (final IOException e)
         {
             e.printStackTrace();
         }

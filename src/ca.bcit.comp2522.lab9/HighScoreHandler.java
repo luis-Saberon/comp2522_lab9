@@ -86,19 +86,16 @@ abstract class HighScoreHandler
             {
                 return DEFAULT_SCORE;
             }
-
-            try
-            {
                 highScore = Integer.parseInt(line.replaceAll("[^0-9]", ""));
                 return highScore;
-            }
-            catch(final NumberFormatException e)
-            {
-                return DEFAULT_SCORE;
-            }
-        } catch(final IOException e)
+        }
+        catch(final IOException e)
         {
             e.printStackTrace();
+        }
+        catch(final NumberFormatException e)
+        {
+            return DEFAULT_SCORE;
         }
         return DEFAULT_SCORE;
     }
@@ -113,12 +110,12 @@ abstract class HighScoreHandler
             {
                 Files.createDirectories(DIR);
             }
-
             if(Files.notExists(PATH))
             {
                 Files.createFile(PATH);
             }
-        } catch (final IOException e)
+        }
+        catch (final IOException e)
         {
             e.printStackTrace();
         }
