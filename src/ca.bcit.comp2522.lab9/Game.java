@@ -13,7 +13,6 @@ public class Game
     private int attempts;
     private final String country;
     private final LoggerService logger;
-    private boolean newHighScore = false;
 
 
     /**
@@ -60,11 +59,6 @@ public class Game
                return input.trim().toLowerCase();
            }
        }
-    }
-
-    public boolean getIfNewHighScore()
-    {
-        return newHighScore;
     }
 
     /**
